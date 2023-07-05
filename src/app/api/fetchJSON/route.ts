@@ -1,15 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const DATA_SOURCE_URL = "https://jsonplaceholder.typicode.com/todos";
+const DATA_SOURCE_URL = "https://jsonplaceholder.typicode.com/users";
 
 export async function GET() {
   try {
     const res = await fetch(DATA_SOURCE_URL);
-    const posts: Post[] = await res.json();
+    const users: User[] = await res.json();
 
-    console.log(posts);
-
-    return NextResponse.json(posts);
+    return NextResponse.json(users);
   } catch (error) {
     return new NextResponse("Database Error!", { status: 500 });
   }
@@ -38,7 +36,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PUT(request: NextRequest) {
-  const { id, title, body }: Post = await request.json();
+  const { id, name, username, email }: User = await request.json();
 
   if (!id) return NextResponse.json({ message: "ID required" });
 
@@ -49,8 +47,9 @@ export async function PUT(request: NextRequest) {
     },
     body: JSON.stringify({
       id,
-      title,
-      body,
+      name,
+      username,
+      email,
     }),
   });
 

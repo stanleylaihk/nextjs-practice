@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const DATA_SOURCE_URL = "https://jsonplaceholder.typicode.com/posts";
+const DATA_SOURCE_URL = "https://jsonplaceholder.typicode.com/users";
 
 export async function GET(
   request: NextRequest,
@@ -8,11 +8,11 @@ export async function GET(
 ) {
   const res = await fetch(`${DATA_SOURCE_URL}/${params.id}`);
 
-  const post: Post = await res.json();
+  const user: User = await res.json();
 
-  if (!post.id) return NextResponse.json({ Message: "Not Found" });
+  if (!user.id) return NextResponse.json({ Message: "Not Found" });
 
-  return NextResponse.json(post);
+  return NextResponse.json(user);
 }
 
 export async function DELETE(request: NextRequest) {
@@ -20,7 +20,7 @@ export async function DELETE(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const { id }: Post = await request.json();
+  const { id }: User = await request.json();
 
   if (!id) return NextResponse.json({ message: "ID required" });
 
@@ -34,13 +34,13 @@ export async function POST(request: NextRequest) {
     }),
   });
 
-  const newPost: Post = await res.json();
+  const newUser: User = await res.json();
 
-  return NextResponse.json(newPost);
+  return NextResponse.json(newUser);
 }
 
 export async function PUT(request: NextRequest) {
-  const { id, title, body }: Post = await request.json();
+  const { id, name, username, email }: User = await request.json();
 
   if (!id) return NextResponse.json({ message: "ID required" });
 

@@ -1,7 +1,7 @@
 "use client";
 import { DevTool } from "@hookform/devtools";
 import React from "react";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
@@ -30,6 +30,7 @@ type FormValues = {
   phone: number;
 };
 
+// const onSubmit: SubmitHandler<FormValues> = (data) => console.log(data);
 const onSubmit = (data: FormValues) => {
   console.log("Form submitted", data);
 };
@@ -66,9 +67,11 @@ const Page = () => {
               className="border rounded p-2"
               {...register("username")}
             />
-            <span className="p-2 text-slate-400">
-              {errors.username?.message}
-            </span>
+            {errors.username && (
+              <span className="p-2 text-slate-400">
+                {errors.username?.message}
+              </span>
+            )}
           </div>
           <div>
             <label htmlFor="email" className="p-2">
@@ -80,7 +83,11 @@ const Page = () => {
               className="border rounded p-2"
               {...register("email")}
             />
-            <span className="p-2 text-slate-400">{errors.email?.message}</span>
+            {errors.email && (
+              <span className="p-2 text-slate-400">
+                {errors.email?.message}
+              </span>
+            )}
           </div>
           <div>
             <label htmlFor="phone" className="p-2">

@@ -1,36 +1,23 @@
+import Topic from "@/models/topic";
 import { connectToMongoDB } from "@/util/mongodb";
-// import { hash } from "bcryptjs";
-import { NextApiRequest, NextApiResponse } from "next";
-import mongoose from "mongoose";
-import { NextResponse } from "next/server";
-import Post from "@/models/post";
+import { NextRequest, NextResponse } from "next/server";
 
-export const GET = async (request: Request) => {
-  try {
-    await connectToMongoDB();
-    const posts: Post[] = await Post.find();
+export const POST = async (request: NextRequest) => {
+  const { title, description } = await request.json();
+  await connectToMongoDB();
 
-    return NextResponse.json(posts);
-  } catch (error) {
-    return new NextResponse("Database Error!", { status: 500 });
-  }
+  await Topic.create({ title, description });
+  return NextResponse.json({ message: "Topic Created" }, { status: 201 });
 };
 
-export const POST = async (request: Request) => {
-  try {
-    await connectToMongoDB();
+export const GET = async (request: NextRequest) => {
+  await connectToMongoDB();
+  const topics: Topic[] = await Topic.find();
+  return NextResponse.json({ topics });
+};
 
-    const { id, title, body }: Post = await request.json();
-    // const userExists = await Post.findOne({ id });
-
-    // if (userExists) {
-    //   return new NextResponse("User already exists", { status: 409 });
-    // } else {
-    //   const hashedPassword = await hash(password, 12);
-    // }
-
-    return new NextResponse("Success", { status: 200 });
-  } catch (error) {
-    return new NextResponse("Database Error!", { status: 500 });
-  }
+export const DELETE = async (request: NextRequest) => {
+  const id = request.nextUrl.searchParams.get("id");
+  await Topic.findByIdAndDelete(id);
+  return NextResponse.json({ message: "Topic deleted" }, { status: 200 });
 };
